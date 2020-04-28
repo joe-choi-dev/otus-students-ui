@@ -103,11 +103,16 @@ export class HomeComponent implements OnInit {
 
   closeResult = '';
 
-  open(content) {
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  open(student, content) {
+    console.log('content: ', student);
+
+    this.searchService.getDetails(student.firstName + student.lastName).subscribe(v => {
+      this.studentDetails = v;
+      this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
     });
   }
 

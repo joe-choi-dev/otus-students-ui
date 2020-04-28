@@ -16,7 +16,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let student of searchResults; index as i" (click)="open(content)">
+    <tr *ngFor="let student of searchResults; index as i" (click)="open(student, content)">
       <th scope="row">{{ i + 1 }}</th>
       <td>{{ student.firstName }}</td>
       <td>{{ student.lastName }}</td>
@@ -33,17 +33,14 @@
       </button>
     </div>
     <div class="modal-body">
-      <form>
-        <div class="form-group">
-          <label for="dateOfBirth">Date of birth</label>
-          <div class="input-group">
-            <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-            </div>
-          </div>
-        </div>
-      </form>
+      <p>FirstName: {{studentDetails.firstName}}</p>
+      <p>LastName: {{studentDetails.lastName}}</p>
+      <p>Email: {{studentDetails.email}}</p>
+      <p>GPA: {{studentDetails.gpa}}</p>
+      <p>Class Grades: </p>
+      <div *ngFor="let studentClass of studentDetails.studentClasses">
+        <p>{{studentClass.className}}: {{studentClass.grade}}</p>
+      </div>
     </div>
   </ng-template>
 

@@ -38,7 +38,7 @@
       <p>Email: {{studentDetails.email}}</p>
       <p>GPA: {{studentDetails.gpa}}</p>
       <p>Class Grades: </p>
-      <div *ngFor="let studentClass of studentDetails.studentClasses">
+      <div class="modal-classes" *ngFor="let studentClass of studentDetails.studentClasses">
         <p>{{studentClass.className}}: {{studentClass.grade}}</p>
       </div>
     </div>

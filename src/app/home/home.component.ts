@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, Subject, throwError } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap, catchError, retryWhen, retry } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map, catchError } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SearchService } from '../search.service';
 
@@ -23,20 +23,25 @@ export class HomeComponent implements OnInit {
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      switchMap(term => {
+      map(term => {
         this.loading = true;
-        if (term === '')  { return this.searchService._getAllEntries(); }
-        return this.searchService._searchEntries(term);
+        if (term === '')  {
+          this.searchService._getAllEntries().subscribe(v => {
+            this.loading = false;
+            this.searchResults = v;
+          });
+        }
+        this.searchService._searchEntries(term).subscribe(v => {
+          this.loading = false;
+          this.searchResults = v;
+        });
       }),
       catchError((e) => {
         this.loading = false;
         this.errorMessage = e.message;
         return throwError(e);
       }),
-    ).subscribe(v => {
-        this.loading = false;
-        this.searchResults = v;
-    });
+    )
 
   ngOnInit() {
     this.searchService.getAll().subscribe(v => {

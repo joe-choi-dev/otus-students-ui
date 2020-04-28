@@ -19,13 +19,11 @@ export class SearchService {
   // makes the HTTP request to get the resources and returns the response as observable
   public searchEntries(term): Observable<any>{
     if (term === "" ){
-      console.log("Not defined");
       return of(null);
     }else{
       let params = {searchTerm: term }
       return this.httpClient.get(this.baseUrl, {params}).pipe(
         map(response => {
-          console.log('response: ' + response)
           return this.searchResults = response;
         })
       );
@@ -40,7 +38,6 @@ export class SearchService {
   public getAll(): Observable<any>{
     return this.httpClient.get(this.baseUrl).pipe(
       map(response => {
-        console.log('response: ' + response);
         return this.searchResults = response;
       })
     );
@@ -50,7 +47,6 @@ export class SearchService {
   public getDetails(name): Observable<any>{
     return this.httpClient.get(this.baseUrl + '/' + name).pipe(
       map(response => {
-        console.log('response: ' + response);
         return this.studentDetails = response;
       })
     );

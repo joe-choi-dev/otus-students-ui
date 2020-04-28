@@ -30,11 +30,6 @@ export class SearchService {
     }
   }
 
-  // returns the response for the first method
-  public _searchEntries(term){
-    return this.searchEntries(term);
-  }
-
   public getAll(): Observable<any>{
     return this.httpClient.get(this.baseUrl).pipe(
       map(response => {
@@ -50,11 +45,6 @@ export class SearchService {
         return this.studentDetails = response;
       })
     );
-  }
-
-  // returns the response for the first method
-  public _getAllEntries(){
-    return this.getAll();
   }
 
 }

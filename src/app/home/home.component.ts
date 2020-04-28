@@ -26,12 +26,12 @@ export class HomeComponent implements OnInit {
       map(term => {
         this.loading = true;
         if (term === '')  {
-          this.searchService._getAllEntries().subscribe(v => {
+          this.searchService.getAll().subscribe(v => {
             this.loading = false;
             this.searchResults = v;
           });
         }
-        this.searchService._searchEntries(term).subscribe(v => {
+        this.searchService.searchEntries(term).subscribe(v => {
           this.loading = false;
           this.searchResults = v;
         });

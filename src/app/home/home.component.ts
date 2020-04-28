@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {Observable, Subject, throwError, of, Subscription} from 'rxjs';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { map, debounceTime, distinctUntilChanged, switchMap, catchError, retryWhen, retry } from 'rxjs/operators';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {SearchService} from '../search.service';
 
 interface Country {
   name: string;
@@ -53,20 +55,50 @@ const states = ['Alabama', 'Alaska', 'American Samoa', 'Arizona', 'Arkansas', 'C
 })
 export class HomeComponent implements OnInit {
 
+  public loading: boolean;
+  public searchResults: any;
+  public searchTerm = new Subject<string>();
+  public studentDetails: any;
+  public errorMessage: any;
+
   public model: any;
   public countries = COUNTRIES;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private searchService: SearchService) { }
 
   search = (text$: Observable<string>) =>
     text$.pipe(
       debounceTime(200),
       distinctUntilChanged(),
-      map(term => term.length < 2 ? []
-        : states.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
-      )
+      switchMap(term => {
+        this.loading = true;
+        if (term === '')  { return this.searchService._getAllEntries(); }
+        return this.searchService._searchEntries(term);
+      }),
+      catchError((e) => {
+        this.loading = false;
+        this.errorMessage = e.message;
+        return throwError(e);
+      }),
+    ).subscribe(v => {
+        this.loading = false;
+        this.searchResults = v;
+    });
 
-  ngOnInit(): void {
+  public onClickStudent(event) {
+    console.log("hello world");
+    this.searchService.getDetails("johnsmith").subscribe(v => {
+      this.studentDetails = v;
+      console.log(this.studentDetails);
+      document.getElementById("myModal").style.display = "block";
+    });
+  }
+
+  ngOnInit() {
+    this.searchService.getAll().subscribe(v => {
+      this.loading = false;
+      this.searchResults = v;
+    });
   }
 
   closeResult = '';

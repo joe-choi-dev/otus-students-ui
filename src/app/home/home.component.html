@@ -2,9 +2,9 @@
   <h1> Otus Students </h1>
 
   <label for="typeahead-basic">Search for a student:</label>
-  <input id="typeahead-basic" type="text" class="form-control" [(ngModel)]="model" [ngbTypeahead]="search"/>
+  <input id="typeahead-basic" type="text" class="form-control" [ngbTypeahead]="search"/>
+
   <hr>
-  <!-- <pre>Model: {{ model | json }}</pre> -->
 
   <table class="table table-striped">
     <thead>
@@ -46,6 +46,4 @@
 
   <hr>
 
-  <pre>{{ closeResult }}</pre>
-  <!-- <app-student-details></app-student-details> -->
 </div>

@@ -15,8 +15,7 @@ export class SearchService {
 
   constructor(private httpClient: HttpClient) { }
 
-
-  // makes the HTTP request to get the resources and returns the response as observable
+  
   public searchEntries(term): Observable<any>{
     if (term === "" ){
       return of(null);
